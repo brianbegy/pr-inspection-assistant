@@ -108,6 +108,11 @@ export class ChatGPT {
         }
         let model = tl.getInput('ai_model', true) as
             | (string & {})
+            | 'gpt-5.1-codex'
+            | 'gpt-5.1'
+            | 'gpt-5.1-mini'
+            | 'gpt-4.1'
+            | 'gpt-4.1-mini'
             | 'o4-mini'
             | 'o3-mini'
             | 'o1-mini'
