@@ -108,19 +108,19 @@ export class ChatGPT {
         }
         let model = tl.getInput('ai_model', true) as
             | (string & {})
-            | 'gpt-5.1-codex'
-            | 'gpt-5.1'
-            | 'gpt-5.1-mini'
+            | 'gpt-3.5-turbo'
+            | 'gpt-4'
             | 'gpt-4.1'
             | 'gpt-4.1-mini'
-            | 'o4-mini'
-            | 'o3-mini'
+            | 'gpt-4o'
+            | 'gpt-5.1'
+            | 'gpt-5.1-codex'
+            | 'gpt-5.1-mini'
+            | 'o1'
             | 'o1-mini'
             | 'o1-preview'
-            | 'o1'
-            | 'gpt-4o'
-            | 'gpt-4'
-            | 'gpt-3.5-turbo';
+            | 'o3-mini'
+            | 'o4-mini';
 
         let userPrompt = {
             fileName: fileName,

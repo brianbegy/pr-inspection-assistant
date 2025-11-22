@@ -43,21 +43,21 @@
             "label": "OpenAI API Model",
             "defaultValue": "gpt-5.1-mini",
             "options": {
-                "gpt-5.1-codex": "gpt-5.1-codex",
-                "gpt-5.1": "gpt-5.1",
-                "gpt-5.1-mini": "gpt-5.1-mini",
+                "gpt-3.5-turbo": "gpt-3.5-turbo",
+                "gpt-4": "gpt-4",
                 "gpt-4.1": "gpt-4.1",
                 "gpt-4.1-mini": "gpt-4.1-mini",
-                "o4-mini": "o4-mini",
-                "o3-mini": "o3-mini",
+                "gpt-4o": "gpt-4o",
+                "gpt-5.1": "gpt-5.1",
+                "gpt-5.1-codex": "gpt-5.1-codex",
+                "gpt-5.1-mini": "gpt-5.1-mini",
+                "o1": "o1",
                 "o1-mini": "o1-mini",
                 "o1-preview": "o1-preview",
-                "o1": "o1",
-                "gpt-4o": "gpt-4o",
-                "gpt-4": "gpt-4",
-                "gpt-3.5-turbo": "gpt-3.5-turbo"
+                "o3-mini": "o3-mini",
+                "o4-mini": "o4-mini"
             },
-            "helpMarkDown": "## OpenAI API Model Configuration\n\n### Description\nChoose the OpenAI API model for code analysis. The selected model determines the depth and capabilities of the code review performed by OpenAI. If using Azure OpenAI services, this identifies the deployment.\n\n### Options\n- **gpt-5.1-codex:** Code-specialized 5.1 series model for rich reasoning on code.\n- **gpt-5.1:** Latest general-purpose 5.1 series model.\n- **gpt-5.1-mini:** Cost-effective 5.1 series variant suitable for most reviews.\n- **gpt-4.1:** General-purpose 4.1 series model.\n- **gpt-4.1-mini:** Lightweight 4.1 series variant.\n- **o4-mini:** Optimized o-series mini model.\n- **o3-mini:** Fast o-series model tuned for reasoning.\n- **o1-mini:** Compact o-series option.\n- **o1-preview:** Early preview of the o1 model.\n- **o1:** Stable o1 model.\n- **gpt-4o:** General-purpose 4o model.\n- **gpt-4:** Legacy GPT-4 model.\n- **gpt-3.5-turbo:** Legacy GPT-3.5 Turbo model.\n\n### Default Value\nThe default OpenAI API model is set to **gpt-5.1-mini**.\n\n Choose the model that best suits your code review requirements."
+            "helpMarkDown": "## OpenAI API Model Configuration\n\n### Description\nChoose the OpenAI API model for code analysis. The selected model determines the depth and capabilities of the code review performed by OpenAI. If using Azure OpenAI services, this identifies the deployment.\n\n### Options\n- **gpt-3.5-turbo:** Legacy GPT-3.5 Turbo model.\n- **gpt-4:** Legacy GPT-4 model.\n- **gpt-4.1:** General-purpose 4.1 series model.\n- **gpt-4.1-mini:** Lightweight 4.1 series variant.\n- **gpt-4o:** General-purpose 4o model.\n- **gpt-5.1:** Latest general-purpose 5.1 series model.\n- **gpt-5.1-codex:** Code-specialized 5.1 series model for rich reasoning on code.\n- **gpt-5.1-mini:** Cost-effective 5.1 series variant suitable for most reviews.\n- **o1:** Stable o1 model.\n- **o1-mini:** Compact o-series option.\n- **o1-preview:** Early preview of the o1 model.\n- **o3-mini:** Fast o-series model tuned for reasoning.\n- **o4-mini:** Optimized o-series mini model.\n\n### Default Value\nThe default OpenAI API model is set to **gpt-5.1-mini**.\n\n Choose the model that best suits your code review requirements."
         },
         {
             "name": "bugs",
