@@ -1,11 +1,11 @@
 {
     "$schema": "https://raw.githubusercontent.com/Microsoft/azure-pipelines-task-lib/master/tasks.schema.json",
-    "id": "d3b07384-d9a7-4f3b-8a1d-6e5f3d2b5c3a",
-    "name": "PRIA",
-    "friendlyName": "PR Inspection Assistant",
-    "description": "Complete a Code Review using OpenAI",
+    "id": "89AC5A38-B3AB-4C40-ADDF-F34274402257",
+    "name": "PRIA-Newmark",
+    "friendlyName": "PR Inspection Assistant, Newmark",
+    "description": "Complete a Code Review using OpenAI, forked from ericwellnitz/pr-inspection-assistant",
     "category": "Utility",
-    "author": "Eric Wellnitz",
+    "author": "Eric Wellnitz, Brian Begy, Newmark",
     "version": {
         "Major": 2,
         "Minor": 1,

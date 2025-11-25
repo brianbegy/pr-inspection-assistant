@@ -1,9 +1,9 @@
 {
     "manifestVersion": 1,
-    "id": "pria",
-    "version": "2.1.46",
+    "id": "prian",
+    "version": "2.2.0",
     "name": "PR Inspection Assistant",
-    "publisher": "EricWellnitz",
+    "publisher": "Newmark",
     "public": true,
     "targets": [
         {
@@ -36,13 +36,13 @@
     },
     "links": {
         "support": {
-            "uri": "https://github.com/ewellnitz/pr-inspection-assistant",
+            "uri": "https://github.com/brianbegy/pr-inspection-assistant",
             "version": "1.0.0"
         }
     },
     "repository": {
         "type": "git",
-        "uri": "https://github.com/ewellnitz/pr-inspection-assistant"
+        "uri": "https://github.com/brianbegy/pr-inspection-assistant"
     },
     "screenshots": [],
     "content": {

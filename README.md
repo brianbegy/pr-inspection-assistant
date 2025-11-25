@@ -134,6 +134,70 @@ $ npm install
 $ npm run package
 ```
 
+## Deploying with tfx-cli
+
+After building your extension and generating the `.vsix` file, you can deploy it to the Azure DevOps Marketplace using the tfx-cli tool:
+
+1. **Install tfx-cli globally (if not already installed):**
+  ```bash
+  npm install -g tfx-cli
+  ```
+
+2. **Publish the extension:**
+  ```bash
+  tfx extension publish --vsix <your-extension>.vsix --publisher <your-publisher-id>
+  ```
+  - Replace `<your-extension>.vsix` with the actual filename of your packaged extension (e.g., `pr-inspection-assistant-1.0.0.vsix`).
+  - Replace `<your-publisher-id>` with your Azure DevOps publisher ID.
+
+  You will need a Personal Access Token (PAT) with Marketplace publish rights. If prompted, provide it or use the `--token` flag.
+
+For more details, see the [official tfx documentation](https://learn.microsoft.com/en-us/azure/devops/extend/publish/command-line).
+
+
+## Installing Privately in Your Azure DevOps Organization
+
+
+If you want to install the extension only for your own Azure DevOps organization (without publishing it publicly):
+
+### 1. Build and Package the Extension
+
+Open a terminal and run the following commands from the root of your repository:
+
+```bash
+# Navigate to the src directory
+cd pr-inspection-assistant/src
+
+# Install dependencies
+npm install
+
+# Build and package the extension (.vsix file)
+npm run package
+```
+
+This will generate a `.vsix` file in the `src` directory.
+
+### 2. Upload and Install the Extension Directly
+
+- Go to your Azure DevOps organization in the browser.
+- Click the shopping bag icon (Marketplace) in the top right, then select “Manage extensions.”
+- Click “Upload new extension” and choose “Azure DevOps Extension.”
+- Upload your `.vsix` file.
+- After upload, click “Install” and select your organization.
+
+### 3. (Alternative) Use tfx-cli to Share Privately
+
+You can also use tfx-cli to share the extension privately with your organization:
+
+```bash
+tfx extension publish --vsix <your-extension>.vsix --share-with <your-organization-name>
+```
+
+- Replace `<your-extension>.vsix` with your packaged file name.
+- Replace `<your-organization-name>` with your Azure DevOps organization name.
+
+This will make the extension available only within your organization, not to the public Marketplace.
+
 ## Local Development Testing
 
 This is a work in progress.
