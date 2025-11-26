@@ -132,7 +132,11 @@ $ npm install
 
 # Build typescript and package .vsix file
 $ npm run package
+
+# Important: Before packaging, delete the node_modules directory to ensure it is not included in your VSIX. This keeps your extension package small and avoids upload errors.
+$ rm -rf node_modules
 ```
+
 
 ## Deploying with tfx-cli
 

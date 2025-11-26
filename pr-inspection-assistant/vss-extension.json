@@ -1,10 +1,10 @@
 {
     "manifestVersion": 1,
-    "id": "prian",
-    "version": "2.2.0",
+    "id": "pria",
+    "version": "2.2.4",
     "name": "PR Inspection Assistant",
     "publisher": "Newmark",
-    "public": true,
+    "public": false,
     "targets": [
         {
             "id": "Microsoft.VisualStudio.Services"
@@ -31,13 +31,12 @@
         "default": "assets/logo.png"
     },
     "branding": {
-        "color": "rgb(138, 43, 226)",
+        "color": "#0062AE",
         "theme": "dark"
     },
     "links": {
         "support": {
-            "uri": "https://github.com/brianbegy/pr-inspection-assistant",
-            "version": "1.0.0"
+            "uri": "https://github.com/brianbegy/pr-inspection-assistant"
         }
     },
     "repository": {
