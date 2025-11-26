@@ -1,5 +1,4 @@
 # Exclude development, test, and config files from VSIX
-**/node_modules/
 .node
 **/*.ts
 **/*.d.ts

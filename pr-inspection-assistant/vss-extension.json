@@ -1,7 +1,7 @@
 {
     "manifestVersion": 1,
     "id": "pria",
-    "version": "2.2.4",
+    "version": "2.2.7",
     "name": "PR Inspection Assistant",
     "publisher": "Newmark",
     "public": false,

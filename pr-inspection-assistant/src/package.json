@@ -1,12 +1,12 @@
 {
     "name": "pr-gpt",
-    "version": "1.1.0",
+    "version": "2.2.7",
     "description": "",
     "main": "index.js",
     "scripts": {
         "build": "tsc",
         "build:watch": "tsc -w",
-        "package": "npm run build && npm run test && cd ../ && mv src/.env* . && tfx extension create --manifest-globs ../vss-extension.json",
+        "package": "npm run build && npm run test && npm prune --production && cd ../ && mv src/.env* . && tfx extension create --manifest-globs ../vss-extension.json",
         "dev": "npm run build && dotenvx run -f .env.local -- npx ts-node main.ts",
         "test": "jest"
     },
@@ -17,9 +17,10 @@
         "azure-pipelines-task-lib": "^4.7.0",
         "gpt-tokenizer": "^2.1.2",
         "micromatch": "^4.0.8",
-        "openai": "^4.80.0",
+        "openai": "^6.9.0",
         "parse-git-diff": "^0.0.17",
-        "simple-git": "^3.21.0"
+        "simple-git": "^3.21.0",
+        "node-fetch": "^3.3.2"
     },
     "devDependencies": {
         "@dotenvx/dotenvx": "^1.36.0",
