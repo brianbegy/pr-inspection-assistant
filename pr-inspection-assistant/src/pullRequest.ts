@@ -126,6 +126,15 @@ export class PullRequest {
             return false;
         }
 
+        // Append confidence note to each comment
+        if (typeof (thread as any).confidenceScore === 'number') {
+            for (const comment of thread.comments) {
+                if (typeof comment.content === 'string') {
+                    comment.content += `\nconfidence: ${(thread as any).confidenceScore}`;
+                }
+            }
+        }
+
         const endpoint = `${this.getPullRequestBaseUri()}/threads?api-version=7.0`;
         const response = await this._ado.post(endpoint, thread);
 
@@ -146,6 +155,7 @@ export class PullRequest {
             fileName = `/${fileName}`;
         }
 
+        // No confidenceScore available in this path, so just call addThread as before
         let body = {
             comments: [
                 {

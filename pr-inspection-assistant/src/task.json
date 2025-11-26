@@ -9,7 +9,7 @@
     "version": {
         "Major": 2,
         "Minor": 2,
-        "Patch": 7
+        "Patch": 16
     },
     "instanceNameFormat": "PRIA $(message)",
     "inputs": [
@@ -49,7 +49,6 @@
                 "gpt-4.1-mini": "gpt-4.1-mini",
                 "gpt-4o": "gpt-4o",
                 "gpt-5.1": "gpt-5.1",
-                "gpt-5.1-codex": "gpt-5.1-codex",
                 "gpt-5.1-mini": "gpt-5.1-mini",
                 "o1": "o1",
                 "o1-mini": "o1-mini",
