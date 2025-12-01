@@ -1,5 +1,5 @@
 import tl from './taskWrapper';
-import fetch from 'node-fetch';
+import fetch, { type Response, type RequestInit } from 'node-fetch';
 import { Agent } from 'https';
 
 export class AzureDevOps {
@@ -19,7 +19,7 @@ export class AzureDevOps {
         return result;
     }
 
-    public async post(endpoint: string, body: object): Promise<fetch.Response> {
+    public async post(endpoint: string, body: object): Promise<Response> {
         const response = await this.fetch({
             endpoint,
             method: 'POST',
@@ -28,7 +28,7 @@ export class AzureDevOps {
         return response;
     }
 
-    public async patch(endpoint: string, body: object): Promise<fetch.Response> {
+    public async patch(endpoint: string, body: object): Promise<Response> {
         const response = await this.fetch({
             endpoint,
             method: 'PATCH',
@@ -43,7 +43,7 @@ export class AzureDevOps {
         return response;
     }
 
-    public async delete(endpoint: string): Promise<fetch.Response> {
+    public async delete(endpoint: string): Promise<Response> {
         const response = await this.fetch({
             endpoint,
             method: 'DELETE',
@@ -60,8 +60,8 @@ export class AzureDevOps {
         endpoint: string;
         method?: string;
         body?: any;
-        overrides?: fetch.RequestInit;
-    }): Promise<fetch.Response> {
+        overrides?: RequestInit;
+    }): Promise<Response> {
         tl.debug(`ADO Fetching: ${method} ${endpoint} ${JSON.stringify(body ?? '')}`);
         const payload = {
             ...{

@@ -33,16 +33,21 @@ Automate pull request (PR) reviews in Azure DevOps using the PR Inspection Assis
 -   A generated API key for you OpenAI service
 -   Your service endpoint URL e.g., `https://my-resource.azure.openai.com/`
 -   A [deployed model](https://learn.microsoft.com/en-us/azure/ai-studio/how-to/deploy-models-openai)
-    -   By default the task will try to use a deployment called `'o4-mini'`
+    -   By default the task will try to use a deployment called `'gpt-5.1-mini'`
     -   Valid options are:
-        -   'o4-mini'
-        -   'o3-mini'
+        -   'gpt-3.5-turbo'
+        -   'gpt-4'
+        -   'gpt-4.1'
+        -   'gpt-4.1-mini'
+        -   'gpt-4o'
+        -   'gpt-5.1'
+        -   'gpt-5.1-codex'
+        -   'gpt-5.1-mini'
+        -   'o1'
         -   'o1-mini'
         -   'o1-preview'
-        -   'o1'
-        -   'gpt-4o'
-        -   'gpt-4'
-        -   'gpt-3.5-turbo'
+        -   'o3-mini'
+        -   'o4-mini'
 -   A designated [API version](https://learn.microsoft.com/en-us/azure/ai-services/openai/api-version-deprecation). Defaults to `'2024-10-21'`
 
 [Learn more about Azure AI Foundry](https://learn.microsoft.com/en-us/azure/ai-studio/azure-openai-in-ai-studio)

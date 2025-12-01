@@ -78,14 +78,26 @@ export class PullRequest {
     public async getLastReviewedIteration(): Promise<IterationRange> {
         const endpoint = `${this.getPullRequestBaseUri()}/properties?api-version=7.0`;
         let properties = await this._ado.get<PropertiesCollection>(endpoint);
-        const value = properties.value[PullRequest.PRIA_LAST_REVIEWED_KEY]?.$value;
-        if (!value) {
+        if (!properties || !properties.value) {
+            Logger.warn(`Properties object or value is undefined. Full properties: ${JSON.stringify(properties)}`);
             Logger.info(`No last reviewed iteration found, returning default range.`);
             return { start: 0, end: 0 };
         }
-        const lastReviewedIteration = JSON.parse(value) as IterationRange;
-        Logger.info(`Last reviewed iteration ${value}`);
-        return lastReviewedIteration;
+        const prop = properties.value[PullRequest.PRIA_LAST_REVIEWED_KEY];
+        if (!prop || !prop.$value) {
+            Logger.warn(`Pria.LastReviewedIteration property not found. Full properties: ${JSON.stringify(properties)}`);
+            Logger.info(`No last reviewed iteration found, returning default range.`);
+            return { start: 0, end: 0 };
+        }
+        try {
+            const lastReviewedIteration = JSON.parse(prop.$value) as IterationRange;
+            Logger.info(`Last reviewed iteration ${prop.$value}`);
+            return lastReviewedIteration;
+        } catch (err) {
+            Logger.warn(`Failed to parse Pria.LastReviewedIteration: ${prop.$value}. Error: ${err}`);
+            Logger.info(`No last reviewed iteration found, returning default range.`);
+            return { start: 0, end: 0 };
+        }
     }
 
     public async saveLastReviewedIteration({ start, end }: IterationRange): Promise<boolean> {
@@ -114,6 +126,15 @@ export class PullRequest {
             return false;
         }
 
+        // Append confidence note to each comment
+        if (typeof (thread as any).confidenceScore === 'number') {
+            for (const comment of thread.comments) {
+                if (typeof comment.content === 'string') {
+                    comment.content += `\nconfidence: ${(thread as any).confidenceScore}`;
+                }
+            }
+        }
+
         const endpoint = `${this.getPullRequestBaseUri()}/threads?api-version=7.0`;
         const response = await this._ado.post(endpoint, thread);
 
@@ -134,6 +155,7 @@ export class PullRequest {
             fileName = `/${fileName}`;
         }
 
+        // No confidenceScore available in this path, so just call addThread as before
         let body = {
             comments: [
                 {
