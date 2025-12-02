@@ -155,7 +155,8 @@ export class ChatGPT {
         ];
 
         if (!this.doesMessageExceedTokenLimit(this.systemMessage + prompt, this.maxTokens)) {
-            const chatResponse = await this._client.chat.completions.create({
+            Logger.debug(`System Message: \n${this.systemMessage}\n\nPrompt:\n${prompt}`);
+         const chatResponse = await this._client.chat.completions.create({
                 model: model,
                 messages: [
                     { role: "system", content: this.systemMessage },
