@@ -36,7 +36,7 @@ export class ChatGPT {
         } else {
             details.push("Do not provide comments on best practices.");
         }
-        if (modifiedLinesOnly) details.push("Only comment on modified lines.");
+        if (modifiedLinesOnly) details.push("Only comment on new or modified lines.");
         if (additionalPrompts.length > 0) details.push(...additionalPrompts);
 
         this.systemMessage =
