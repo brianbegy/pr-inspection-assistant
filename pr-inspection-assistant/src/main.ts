@@ -134,6 +134,14 @@ export class Main {
         let currentRunComments: Comment[] = [];
         let deduplicationCriteriaMet = false;
 
+        // Collect rules context files once for all files
+        let repoRoot: string = process.cwd();
+        if (this._repository && typeof this._repository["gitOptions"]?.baseDir === "string") {
+            repoRoot = this._repository["gitOptions"].baseDir || process.cwd();
+        }
+        const rulesMap = PullRequest.collectContextFiles(filesToReview, repoRoot);
+        const rulesContext = Array.from(rulesMap.values()).join('\n\n');
+
         for (const [index, fileName] of filesToReview.entries()) {
             Logger.info(`Reviewing file ${index + 1}/${filesToReview.length}: ${fileName}`);
 
@@ -151,7 +159,7 @@ export class Main {
             Logger.info('Comments for exclusion: ' + commentsForExclusion.length, commentsForExclusion);
 
             const diff = await this._repository.getDiff(fileName);
-            const codeReview = await this._chatGpt.performCodeReview(diff, fileName, commentsForExclusion);
+            const codeReview = await this._chatGpt.performCodeReview(diff, fileName, commentsForExclusion, rulesContext);
 
             // Flatten and collect new comments from this review
             const newComments = codeReview.threads.flatMap((thread) => thread.comments);

@@ -46,8 +46,8 @@ export class ChatGPT {
         console.info(`System prompt:\n${this.systemMessage}`);
     }
 
-    public async performCodeReview(diff: string, fileName: string, existingComments: string[]): Promise<Review> {
-        const review = await this.sendRequest(diff, fileName, existingComments);
+    public async performCodeReview(diff: string, fileName: string, existingComments: string[], rulesContext: string = ""): Promise<Review> {
+        const review = await this.sendRequest(diff, fileName, existingComments, rulesContext);
 
         // Log threads missing threadContext or filePath for debugging
         if (review && Array.isArray(review.threads)) {
@@ -65,7 +65,7 @@ export class ChatGPT {
         return review;
     }
 
-    private async sendRequest(diff: string, fileName: string, existingComments: string[]): Promise<Review> {
+    private async sendRequest(diff: string, fileName: string, existingComments: string[], rulesContext: string = ""): Promise<Review> {
         const emptyReview: Review = { threads: [] };
 
         if (!fileName.startsWith('/')) {
@@ -93,7 +93,9 @@ export class ChatGPT {
             existingComments: existingComments,
         };
 
-        let prompt = JSON.stringify(userPrompt, null, 4);
+
+        // Prepend rules context to the prompt if present
+        let prompt = rulesContext ? (rulesContext + "\n\n" + JSON.stringify(userPrompt, null, 4)) : JSON.stringify(userPrompt, null, 4);
 
         Logger.info(`Diff:\n${diff}`);
         Logger.debug(`Using OpenAI model: ${model}`);
@@ -153,7 +155,8 @@ export class ChatGPT {
         ];
 
         if (!this.doesMessageExceedTokenLimit(this.systemMessage + prompt, this.maxTokens)) {
-            const chatResponse = await this._client.chat.completions.create({
+            Logger.debug(`System Message: \n${this.systemMessage}\n\nPrompt:\n${prompt}`);
+         const chatResponse = await this._client.chat.completions.create({
                 model: model,
                 messages: [
                     { role: "system", content: this.systemMessage },

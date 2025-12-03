@@ -8,8 +8,60 @@ import { GitPullRequestIterationChanges } from './types/azureDevOps/gitPullReque
 import { IterationRange } from './types/iterationRange';
 import { Thread } from './types/thread';
 import { Comment } from './types/comment';
+import * as fs from 'fs';
+import * as path from 'path';
 
 export class PullRequest {
+    /**
+     * Collects the content of /AGENTS.md, /.cursorrules, and any agents.md or .cursorrules files in parent directories of changed files.
+     * @param changedFiles Array of changed file paths (relative to repo root)
+     * @param repoRoot Absolute path to the repo root
+     * @returns Map of file path to file content
+     */
+    public static collectContextFiles(changedFiles: string[], repoRoot: string): Map<string, string> {
+        const contextFiles = new Set<string>();
+
+        // List of valid context file names (case-insensitive)
+        const RULES_FILE_NAMES = ['AGENTS.md', '.cursorrules'];
+        const RULES_FILE_NAMES_LC = RULES_FILE_NAMES.map(name => name.toLowerCase());
+
+        // Helper to add matching files from a directory
+        function addMatchingFilesFromDir(dir: string) {
+            if (!fs.existsSync(dir) || !fs.statSync(dir).isDirectory()) return;
+            const files = fs.readdirSync(dir);
+            for (const file of files) {
+                const idx = RULES_FILE_NAMES_LC.indexOf(file.toLowerCase());
+                if (idx !== -1) {
+                    contextFiles.add(path.join(dir, file));
+                }
+            }
+        }
+
+        // Always include root files if they exist (case-insensitive)
+        addMatchingFilesFromDir(repoRoot);
+
+        for (const changedFile of changedFiles) {
+            let dir = path.dirname(path.join(repoRoot, changedFile));
+            // Walk up to repo root
+            while (dir.startsWith(repoRoot)) {
+                addMatchingFilesFromDir(dir);
+                if (dir === repoRoot) break;
+                dir = path.dirname(dir);
+            }
+        }
+
+        // Read file contents
+        const result = new Map<string, string>();
+        for (const filePath of contextFiles) {
+            try {
+                const content = fs.readFileSync(filePath, 'utf8');
+                result.set(filePath, content);
+            } catch (e) {
+                // Optionally log or handle read errors
+            }
+        }
+        return result;
+    }
     private _httpsAgent: Agent;
 
     private _collectionUri: string = tl.getVariable('System.TeamFoundationCollectionUri')!;
