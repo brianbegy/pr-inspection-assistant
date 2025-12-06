@@ -4,4 +4,5 @@ export interface GitPullRequest {
     pullRequestId: number;
     lastMergeCommit: GitCommitRef;
     lastMergeSourceCommit: GitCommitRef;
+    description?: string;
 }
