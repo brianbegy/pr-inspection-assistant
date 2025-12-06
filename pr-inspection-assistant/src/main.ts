@@ -44,7 +44,9 @@ export class Main {
         const filesToReview = this.filterFiles(iterationFiles, inputs);
         Logger.info(`After filtering, ${filesToReview.length} files will be reviewed:`, filesToReview);
 
-        const reviewResults = await this.reviewFiles(filesToReview, inputs);
+        const pullRequestDescription = await this._pullRequest.getPullRequestDescription();
+
+        const reviewResults = await this.reviewFiles(filesToReview, inputs, pullRequestDescription);
         await this.processReviewResults(reviewResults, inputs);
 
         await this._pullRequest.saveLastReviewedIteration(reviewRange);
@@ -123,7 +125,11 @@ export class Main {
         });
     }
 
-    private static async reviewFiles(filesToReview: string[], inputs: InputValues): Promise<ReviewResult[]> {
+    private static async reviewFiles(
+        filesToReview: string[],
+        inputs: InputValues,
+        pullRequestDescription: string
+    ): Promise<ReviewResult[]> {
         tl.setProgress(0, 'Step 1: Performing Code Review');
         Logger.info('Starting code review process...');
 
@@ -159,7 +165,13 @@ export class Main {
             Logger.info('Comments for exclusion: ' + commentsForExclusion.length, commentsForExclusion);
 
             const diff = await this._repository.getDiff(fileName);
-            const codeReview = await this._chatGpt.performCodeReview(diff, fileName, commentsForExclusion, rulesContext);
+            const codeReview = await this._chatGpt.performCodeReview(
+                diff,
+                fileName,
+                commentsForExclusion,
+                rulesContext,
+                pullRequestDescription
+            );
 
             // Flatten and collect new comments from this review
             const newComments = codeReview.threads.flatMap((thread) => thread.comments);

@@ -94,7 +94,13 @@ export class PullRequest {
         tl.debug(`Getting pull request ${this._pullRequestId}`);
 
         const endpoint = `${this.getPullRequestBaseUri()}/?api-version=7.0`;
-        return await this._ado.get<GitPullRequest>(endpoint);
+        this._pullRequest = await this._ado.get<GitPullRequest>(endpoint);
+        return this._pullRequest;
+    }
+
+    public async getPullRequestDescription(): Promise<string> {
+        const pullRequest = await this.getPullRequest();
+        return pullRequest.description ?? '';
     }
 
     public async getLatestIterationId(): Promise<number> {
