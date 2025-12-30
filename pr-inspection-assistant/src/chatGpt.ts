@@ -54,7 +54,7 @@ export class ChatGPT {
         prContext: string = "",
         pullRequestDescription: string = ""
     ): Promise<Review> {
-        const review = await this.sendRequest(diff, fileName, existingComments, rulesContext, prContext, PullRequestDescription);
+        const review = await this.sendRequest(diff, fileName, existingComments, rulesContext, prContext, pullRequestDescription);
 
         // Log threads missing threadContext or filePath for debugging
         if (review && Array.isArray(review.threads)) {
