@@ -46,8 +46,16 @@ export class ChatGPT {
         console.info(`System prompt:\n${this.systemMessage}`);
     }
 
-    public async performCodeReview(diff: string, fileName: string, existingComments: string[], rulesContext: string = ""): Promise<Review> {
-        const review = await this.sendRequest(diff, fileName, existingComments, rulesContext);
+    public async performCodeReview({diff, fileName, existingComments, rulesContext,prContext, pullRequestDescription}:
+    { diff: string,
+        fileName: string,
+        existingComments: string[],
+        rulesContext: string,
+        prContext: string,
+        pullRequestDescription: string
+    }
+    ): Promise<Review> {
+        const review = await this.sendRequest(diff, fileName, existingComments, rulesContext, prContext, pullRequestDescription);
 
         // Log threads missing threadContext or filePath for debugging
         if (review && Array.isArray(review.threads)) {
@@ -65,7 +73,14 @@ export class ChatGPT {
         return review;
     }
 
-    private async sendRequest(diff: string, fileName: string, existingComments: string[], rulesContext: string = ""): Promise<Review> {
+    private async sendRequest(
+        diff: string,
+        fileName: string,
+        existingComments: string[],
+        rulesContext: string = "",
+        prContext: string = "",
+        pullRequestDescription: string = ""
+    ): Promise<Review> {
         const emptyReview: Review = { threads: [] };
 
         if (!fileName.startsWith('/')) {
@@ -91,6 +106,8 @@ export class ChatGPT {
             fileName: fileName,
             diff: diff,
             existingComments: existingComments,
+            pullRequestDescription: pullRequestDescription,
+            prContext: prContext
         };
 
 

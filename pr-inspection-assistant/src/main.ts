@@ -41,10 +41,11 @@ export class Main {
         const iterationFiles = await this._pullRequest.getIterationFiles(reviewRange);
         Logger.info(`Found ${iterationFiles.length} changed files in this run:`);
 
+        const pullRequestDescription = await this._pullRequest.getPullRequestDescription()
         const filesToReview = this.filterFiles(iterationFiles, inputs);
         Logger.info(`After filtering, ${filesToReview.length} files will be reviewed:`, filesToReview);
 
-        const reviewResults = await this.reviewFiles(filesToReview, inputs);
+        const reviewResults = await this.reviewFiles({filesToReview, inputs, pullRequestDescription});
         await this.processReviewResults(reviewResults, inputs);
 
         await this._pullRequest.saveLastReviewedIteration(reviewRange);
@@ -123,7 +124,7 @@ export class Main {
         });
     }
 
-    private static async reviewFiles(filesToReview: string[], inputs: InputValues): Promise<ReviewResult[]> {
+    private static async reviewFiles({filesToReview, inputs, pullRequestDescription}:{filesToReview: string[], inputs: InputValues, pullRequestDescription:string}): Promise<ReviewResult[]> {
         tl.setProgress(0, 'Step 1: Performing Code Review');
         Logger.info('Starting code review process...');
 
@@ -142,6 +143,9 @@ export class Main {
         const rulesMap = PullRequest.collectContextFiles(filesToReview, repoRoot);
         const rulesContext = Array.from(rulesMap.values()).join('\n\n');
 
+        const diffByFile = new Map<string, string>();
+        const prContext = await this.buildPrContext(filesToReview, diffByFile);
+
         for (const [index, fileName] of filesToReview.entries()) {
             Logger.info(`Reviewing file ${index + 1}/${filesToReview.length}: ${fileName}`);
 
@@ -158,8 +162,15 @@ export class Main {
             Logger.info('Current run comments: ' + currentRunComments.length);
             Logger.info('Comments for exclusion: ' + commentsForExclusion.length, commentsForExclusion);
 
-            const diff = await this._repository.getDiff(fileName);
-            const codeReview = await this._chatGpt.performCodeReview(diff, fileName, commentsForExclusion, rulesContext);
+            const diff = diffByFile.get(fileName) ?? (await this._repository.getDiff(fileName));
+            const codeReview = await this._chatGpt.performCodeReview({
+                diff,
+                fileName,
+                existingComments: commentsForExclusion,
+                rulesContext,
+                prContext,
+                pullRequestDescription}
+            );
 
             // Flatten and collect new comments from this review
             const newComments = codeReview.threads.flatMap((thread) => thread.comments);
@@ -173,6 +184,30 @@ export class Main {
         }
 
         return reviewResults;
+    }
+
+    private static async buildPrContext(filesToReview: string[], diffByFile: Map<string, string>): Promise<string> {
+        const summaryLines: string[] = [];
+        summaryLines.push(`Changed files (${filesToReview.length}):`);
+        filesToReview.forEach((fileName) => summaryLines.push(`- ${fileName}`));
+        summaryLines.push('', 'Diff summary (hunk headers):');
+
+        for (const fileName of filesToReview) {
+            const diff = await this._repository.getDiff(fileName);
+            diffByFile.set(fileName, diff);
+
+            const hunkHeaders = (diff.match(/^@@.*$/gm) ?? []).slice(0, 5);
+            const headerSummary =
+                hunkHeaders.length > 0
+                    ? hunkHeaders.join(' | ')
+                    : diff.includes('Binary files')
+                      ? 'Binary file change'
+                      : 'No hunk headers detected';
+
+            summaryLines.push(`- ${fileName}: ${headerSummary}`);
+        }
+
+        return summaryLines.join('\n');
     }
 
     private static async processReviewResults(reviewResults: ReviewResult[], inputs: InputValues): Promise<void> {
