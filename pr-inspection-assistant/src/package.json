@@ -1,12 +1,12 @@
 {
     "name": "pr-gpt",
-    "version": "2.2.21",
+    "version": "2.2.22",
     "description": "",
     "main": "index.js",
     "scripts": {
         "build": "tsc",
         "build:watch": "tsc -w",
-        "package": "npm run build && npm run test && npm prune --production && cd ../ && mv src/.env* . && tfx extension create --manifest-globs ../vss-extension.json",
+        "package": "npm run build && npm run test && npm prune --production && cd ../ && mv src/.env* . || tfx extension create --manifest-globs vss-extension.json",
         "dev": "npm run build && dotenvx run -f .env.local -- npx ts-node main.ts",
         "test": "jest"
     },

@@ -41,10 +41,11 @@ export class Main {
         const iterationFiles = await this._pullRequest.getIterationFiles(reviewRange);
         Logger.info(`Found ${iterationFiles.length} changed files in this run:`);
 
+        const pullRequestDescription = await this._pullRequest.getPullRequestDescription()
         const filesToReview = this.filterFiles(iterationFiles, inputs);
         Logger.info(`After filtering, ${filesToReview.length} files will be reviewed:`, filesToReview);
 
-        const reviewResults = await this.reviewFiles(filesToReview, inputs);
+        const reviewResults = await this.reviewFiles({filesToReview, inputs, pullRequestDescription});
         await this.processReviewResults(reviewResults, inputs);
 
         await this._pullRequest.saveLastReviewedIteration(reviewRange);
@@ -123,7 +124,7 @@ export class Main {
         });
     }
 
-    private static async reviewFiles(filesToReview: string[], inputs: InputValues): Promise<ReviewResult[]> {
+    private static async reviewFiles({filesToReview, inputs, pullRequestDescription}:{filesToReview: string[], inputs: InputValues, pullRequestDescription:string}): Promise<ReviewResult[]> {
         tl.setProgress(0, 'Step 1: Performing Code Review');
         Logger.info('Starting code review process...');
 
@@ -162,12 +163,13 @@ export class Main {
             Logger.info('Comments for exclusion: ' + commentsForExclusion.length, commentsForExclusion);
 
             const diff = diffByFile.get(fileName) ?? (await this._repository.getDiff(fileName));
-            const codeReview = await this._chatGpt.performCodeReview(
+            const codeReview = await this._chatGpt.performCodeReview({
                 diff,
                 fileName,
-                commentsForExclusion,
+                existingComments: commentsForExclusion,
                 rulesContext,
-                prContext
+                prContext,
+                pullRequestDescription}
             );
 
             // Flatten and collect new comments from this review

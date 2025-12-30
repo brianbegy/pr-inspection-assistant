@@ -46,13 +46,14 @@ export class ChatGPT {
         console.info(`System prompt:\n${this.systemMessage}`);
     }
 
-    public async performCodeReview(
-        diff: string,
+    public async performCodeReview({diff, fileName, existingComments, rulesContext,prContext, pullRequestDescription}:
+    { diff: string,
         fileName: string,
         existingComments: string[],
-        rulesContext: string = "",
-        prContext: string = "",
-        pullRequestDescription: string = ""
+        rulesContext: string,
+        prContext: string,
+        pullRequestDescription: string
+    }
     ): Promise<Review> {
         const review = await this.sendRequest(diff, fileName, existingComments, rulesContext, prContext, pullRequestDescription);
 
