@@ -51,9 +51,10 @@ export class ChatGPT {
         fileName: string,
         existingComments: string[],
         rulesContext: string = "",
-        prContext: string = ""
+        prContext: string = "",
+        pullRequestDescription: string = ""
     ): Promise<Review> {
-        const review = await this.sendRequest(diff, fileName, existingComments, rulesContext, prContext);
+        const review = await this.sendRequest(diff, fileName, existingComments, rulesContext, prContext, PullRequestDescription);
 
         // Log threads missing threadContext or filePath for debugging
         if (review && Array.isArray(review.threads)) {
@@ -76,7 +77,8 @@ export class ChatGPT {
         fileName: string,
         existingComments: string[],
         rulesContext: string = "",
-        prContext: string = ""
+        prContext: string = "",
+        pullRequestDescription: string = ""
     ): Promise<Review> {
         const emptyReview: Review = { threads: [] };
 
@@ -103,7 +105,8 @@ export class ChatGPT {
             fileName: fileName,
             diff: diff,
             existingComments: existingComments,
-            prContext: prContext,
+            pullRequestDescription: pullRequestDescription,
+            prContext: prContext
         };
 
 

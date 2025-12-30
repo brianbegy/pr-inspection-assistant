@@ -306,4 +306,9 @@ export class PullRequest {
 
         return comments;
     }
+
+    public async getPullRequestDescription(): Promise<string> {
+        const pullRequest = await this.getPullRequest();
+        return pullRequest.description ?? '';
+    }
 }
