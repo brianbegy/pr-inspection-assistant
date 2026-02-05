@@ -179,7 +179,7 @@ npm install
 npm run package
 ```
 
-This will generate a `.vsix` file in the `src` directory.
+This will generate a `.vsix` file in the `src/..` directory.
 
 ### 2. Upload and Install the Extension Directly
 
