@@ -148,6 +148,13 @@
             "helpMarkDown": "Set to true to allow reviewing on requeues.  Default value is `false`."
         },
         {
+            "name": "full_pr_review",
+            "type": "boolean",
+            "label": "Review entire pull request",
+            "defaultValue": false,
+            "helpMarkDown": "Set to true to ignore the last reviewed iteration and always compare the latest commit against the start of the pull request. Leave as false to continue reviewing only new commits."
+        },
+        {
             "name": "confidence_mode",
             "type": "boolean",
             "label": "Enable confidence mode (Experimental)",
