@@ -109,6 +109,7 @@ Additional input options can be set to tailor how the code is reviewed.
 | `performance`         | Boolean | `false` | Specify whether to include performance checks during the code review process.                  |
 | `best_practices`      | Boolean | `false` | Specify whether to include checks for missed best practices during the code review process.    |
 | `modified_lines_only` | Boolean | `true`  | Specify whether to check modified lines only.                                                  |
+| `full_pr_review`      | Boolean | `false` | When `true`, ignore cached iterations and review the entire PR diff against the target branch.   |
 | `file_extensions`     | String  | `null`  | Specify a comma-separated list of file extensions for which you want to perform a code review. |
 | `file_excludes`       | String  | `null`  | Specify a comma-separated list of file names that should be excluded from code reviews.        |
 | `additional_prompts`  | String  | `null`  | Specify additional OpenAI prompts as a comma-separated list to enhance the code review.        |

@@ -42,6 +42,7 @@ export class InputManager {
             confidenceMinimum: parseInt(tl.getInput('confidence_minimum', false) ?? '9', 10),
             dedupeAcrossFiles: tl.getBoolInput('dedupe_across_files', false),
             dedupeAcrossFilesThreshold: parseInt(tl.getInput('dedupe_across_files_threshold', false) ?? '10', 10),
+            fullPrReview: tl.getBoolInput('full_pr_review', false),
         };
         this.logInputs(inputs);
         return inputs;

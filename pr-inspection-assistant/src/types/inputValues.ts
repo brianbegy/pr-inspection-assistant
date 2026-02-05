@@ -18,4 +18,5 @@ export interface InputValues {
     confidenceMinimum: number;
     dedupeAcrossFiles: boolean;
     dedupeAcrossFilesThreshold: number;
+    fullPrReview: boolean;
 }

@@ -30,7 +30,7 @@ export class Main {
 
         this._pullRequest = new PullRequest();
 
-        const { reviewRange, isRequeued } = await this.getReviewRange();
+        const { reviewRange, isRequeued } = await this.getReviewRange(inputs);
         if (isRequeued && !inputs.allowRequeue) {
             Logger.info(
                 'No new changes detected since last review and requeue is disabled. Skipping pull request review.'
@@ -48,7 +48,11 @@ export class Main {
         const reviewResults = await this.reviewFiles({filesToReview, inputs, pullRequestDescription});
         await this.processReviewResults(reviewResults, inputs);
 
-        await this._pullRequest.saveLastReviewedIteration(reviewRange);
+        if (inputs.fullPrReview) {
+            Logger.info('Full PR review requested; not updating last reviewed iteration.');
+        } else {
+            await this._pullRequest.saveLastReviewedIteration(reviewRange);
+        }
         tl.setResult(tl.TaskResult.Succeeded, 'Pull Request reviewed.');
         Logger.info('Pull Request review completed successfully.');
     }
@@ -98,7 +102,13 @@ export class Main {
         await this._repository.setupCurrentBranch();
     }
 
-    private static async getReviewRange() {
+    private static async getReviewRange(inputs: InputValues) {
+        if (inputs.fullPrReview) {
+            const latestIterationId = await this._pullRequest.getLatestIterationId();
+            Logger.info(`Full PR review enabled. Reviewing range 0-${latestIterationId}.`);
+            return { reviewRange: { start: 0, end: latestIterationId }, isRequeued: false };
+        }
+
         const lastReviewedIteration = await this._pullRequest.getLastReviewedIteration();
         const latestIterationId = await this._pullRequest.getLatestIterationId();
 
