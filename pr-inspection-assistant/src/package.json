@@ -1,6 +1,6 @@
 {
     "name": "pr-gpt",
-    "version": "2.2.23",
+    "version": "2.2.25",
     "description": "",
     "main": "index.js",
     "scripts": {
